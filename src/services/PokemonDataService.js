@@ -1,7 +1,7 @@
 import http from "../http-common";
 
 class PokemonDataService {
-  BuscarTodos() {
+  buscarTodos() {
     return http.get("/pokemons");
   }
 

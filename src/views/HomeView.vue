@@ -1,18 +1,24 @@
 <script>
-  import axios from 'axios';
+  import PokemonDataService from '../services/PokemonDataService';
   export default {
-    name: "ListaDePokemons",
+    name: "lista-pokemons",
     data() {
       return { pokemons: [] };
     },
-    async created() {
-      try {
-        var resposta = await axios.get('http://localhost:8080/api/v1/pokemons');
-        console.log(resposta);
-        this.pokemons = resposta.data;
-      } catch(erro) {
-        console.log(erro);
+    methods: {
+      buscarPokemons() {
+        PokemonDataService.buscarTodos()
+        .then(resposta => {
+          this.pokemons = resposta.data;
+          console.log(resposta.data);
+        })
+        .catch(erro => {
+          console.log(erro);
+        });
       }
+    },
+    mounted() {
+      this.buscarPokemons();
     }
   }
   </script>
