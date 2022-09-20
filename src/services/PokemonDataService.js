@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class PokemonDataService {
-  buscarTodos() {
-    return http.get("/pokemons");
+  async buscarTodos() {
+    return await http.get("/pokemons");
   }
 
   buscarPeloId(id) {
