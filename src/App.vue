@@ -1,34 +1,33 @@
-<script>
-import axios from 'axios';
-export default {
-  name: "ListaDePokemons",
-  data() {
-    return { pokemons: [] };
-  },
-  async created() {
-    try {
-      var resposta = await axios.get('http://localhost:8080/api/v1/pokemons');
-      console.log(resposta);
-      this.pokemons = resposta.data;
-    } catch(erro) {
-      console.log(erro);
-    }
-  }
-}
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-<div>
-  <h2>Lista de Pokemon</h2>
-  <ul>
-      <li v-for="pokemon in pokemons" :key="pokemon.id">
-        <img :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/' + pokemon.numeroPokedex + '.png'" />
-        {{pokemon.numeroPokedex}} - {{pokemon.nome}} 
-      </li>
-  </ul>  
-</div>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <RouterLink to="/" class="navbar-brand">Home</RouterLink>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Expandir">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <RouterLink to="/ataques" class="nav-link">Ataques</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink to="/tipos" class="nav-link">Tipos</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink to="/about" class="nav-link">Sobre</RouterLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-3">
+      <RouterView />
+    </div>
+  </header>
 </template>
-
-<style>
-
-</style>
