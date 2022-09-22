@@ -25,7 +25,7 @@ class PokemonDataService {
         await http.delete('/pokemons/${id}');
     }
 
-    async remover(nome) {
+    async removerPeloNome(nome) {
         await http.delete('/pokemons?termo=${nome}');
     }
     
