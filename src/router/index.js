@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PokemonListaView from '../views/PokemonListaView.vue';
 import TipoNovoView from '../views/TipoNovoView.vue';
+import AtaqueNovoView from '../views/AtaqueNovoView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/tipos/novo',
       name: 'tipos-novo',
       component: TipoNovoView
+    },
+    {
+      path: '/ataques/novo',
+      name: 'ataques-novo',
+      component: AtaqueNovoView
     },
     {
       path: '/pokemons/lista',
