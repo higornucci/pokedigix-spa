@@ -16,6 +16,9 @@ export default {
         });
     }
   },
+  mudarCaminho() {
+    console.log("evento");
+  },
   mounted() {
     this.buscarPokemons();
   }
