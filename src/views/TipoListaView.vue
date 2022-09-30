@@ -51,6 +51,9 @@ export default {
         this.inicializaTipo();
         this.isLoading = false;
       });
+    },
+    novo() {
+        this.$router.push({name: 'tipos-novo'});
     }
   },
   mounted() {
@@ -111,6 +114,11 @@ export default {
           </tr>
         </tbody>
       </table>
+      <div class="row">
+        <div class="col-1">
+            <button @click="novo" class="btn btn-primary">Novo</button>
+        </div>
+      </div>
     </div>
     <div
       class="modal fade"

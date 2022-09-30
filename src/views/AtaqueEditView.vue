@@ -173,7 +173,7 @@ export default {
             <span>Ataque id: {{ataqueResponse.id}}</span>
         </div>
         <div class="row-sm">
-            <button @click="voltar" class="btn btn-primary">Voltar</button>
+            <button @click="voltar" class="btn btn-secondary">Voltar</button>
         </div>
     </div>
 </template>
