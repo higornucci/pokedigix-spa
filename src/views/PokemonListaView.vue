@@ -34,12 +34,12 @@ export default {
           <div class="card mb-3">
             <div class="card-header">
               <div class="row">
-                <div class="col-sm-8">
-                  <p class="card-text">
+                <div class="col-sm-6">
+                  <p class="card-text text-start">
                     <strong>{{ pokemon.nome }}</strong>
                   </p>
                 </div>
-                <div class="col-sm-4 text-end">
+                <div class="col-sm-6 text-end">
                   <p class="card-text">Lv. {{ pokemon.nivel }}</p>
                 </div>
               </div>
