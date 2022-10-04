@@ -32,6 +32,20 @@ export default {
 
 <template>
 <h4 class="mt-2 mb-4">Cadastro de Pokemons</h4>
+<div class="row justify-content-md-center" v-if="pokemonRequest.numeroPokedex > 0">
+    <div class="col col-sm-2">
+    <div class="card" >
+
+        <img :alt="'Imagem do Pokemon' + pokemonRequest.nome" :title="pokemonRequest.nome" class="card-img"
+                          :src="
+                            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/' +
+                            pokemonRequest.numeroPokedex +
+                            '.png'
+                          "
+                        />
+    </div>
+    </div>
+            </div>
 <form>
     <div class="row">
         <div class="col-8">

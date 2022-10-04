@@ -1,5 +1,6 @@
 <script>
 import PokemonDataService from "../services/PokemonDataService";
+import * as bootstrap from 'bootstrap';
 export default {
   name: "lista-pokemons",
   data() {
@@ -21,11 +22,21 @@ export default {
   },
   mounted() {
     this.buscarPokemons();
+    var alertQs = document.getElementById('success-alert');
+    var bsAlert = bootstrap.Alert.getOrCreateInstance(alertQs);
+    console.log(bsAlert);
+    window.setTimeout(() => { bsAlert.close(); }, 3000);
   },
 };
 </script>
 
 <template>
+  <div class="alert alert-success alert-dismissible fade show mt-1" role="alert" id="success-alert">
+    <div>
+      An example success alert with an icon
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <main>
     <div>
       <h2>Lista de Pokemon</h2>
@@ -72,38 +83,24 @@ export default {
                   </p>
                   <p class="card-text">
                     Genero:
-                    <svg
-                      v-if="pokemon.genero == 'FEMININO'"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-gender-female"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"
-                      />
+                    <svg v-if="pokemon.genero == 'FEMININO'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
                     </svg>
-                    <svg
-                      v-else
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-gender-male"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"
-                      />
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
                     </svg>
                   </p>
-                  <p class="card-text">Pokedex: {{ pokemon.numeroPokedex }}</p>
+                  <div class="collapse" :id="'collapseExample' + pokemon.id">
+  <div class="card card-body">
+    <p class="card-text">Pokedex: {{ pokemon.numeroPokedex }}</p>
+                  <p class="card-text">Pokedex: {{ pokemon.peso }}</p>
+                  <p class="card-text">Pokedex: {{ pokemon.altura }}</p>
+                  <p class="card-text">Pokedex: {{ pokemon.felicidade }}</p>
+  </div>
+</div>
+                  
                   <div class="text-center">
-                    <button type="button" class="btn btn-outline-primary pt-1 m-1">
+                    <button type="button" data-bs-toggle="collapse" class="btn btn-outline-primary pt-1 m-1" :href="'#collapseExample' + pokemon.id">
                       Mais
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
