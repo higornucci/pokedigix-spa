@@ -1,6 +1,5 @@
 <script>
 import PokemonDataService from "../services/PokemonDataService";
-import * as bootstrap from 'bootstrap';
 export default {
   name: "lista-pokemons",
   data() {
@@ -17,26 +16,13 @@ export default {
         });
     },
   },
-  mudarCaminho() {
-    console.log("evento");
-  },
   mounted() {
     this.buscarPokemons();
-    var alertQs = document.getElementById('success-alert');
-    var bsAlert = bootstrap.Alert.getOrCreateInstance(alertQs);
-    console.log(bsAlert);
-    window.setTimeout(() => { bsAlert.close(); }, 3000);
   },
 };
 </script>
 
 <template>
-  <div class="alert alert-success alert-dismissible fade show mt-1" role="alert" id="success-alert">
-    <div>
-      An example success alert with an icon
-    </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
   <main>
     <div>
       <h2>Lista de Pokemon</h2>
@@ -74,7 +60,9 @@ export default {
                     <div class="row">
                       <div v-for="tipo in pokemon.tipos" :key="tipo.id" class="col-6">
                         <div class="card">
-                          <div class="card-body text-center p-1">
+                          <div 
+                          class="card-body text-center p-1"
+                          :style="{backgroundColor: tipo.cor}">
                             {{tipo.nome}}
                           </div>
                         </div>
