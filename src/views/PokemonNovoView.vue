@@ -11,6 +11,8 @@ export default {
             tipos: [],
             salvo: false,
             ataques: [],
+            ataquesSelecionados: [],
+            ataqueSelecionado: {},
         }
     },
     methods: {
@@ -27,10 +29,6 @@ export default {
             AtaqueDataService.buscarTodos()
             .then(resposta => {
                 this.ataques = resposta;
-                this.pokemonRequest.ataquesIds[0] = "";
-                this.pokemonRequest.ataquesIds[1] = "";
-                this.pokemonRequest.ataquesIds[2] = "";
-                this.pokemonRequest.ataquesIds[3] = "";
             })
             .catch(erro => {
                 console.log(erro);
@@ -40,23 +38,30 @@ export default {
             const listaFiltradaTipos 
                 = this.pokemonRequest.tiposIds.filter(tipo => tipo != "");
             this.pokemonRequest.tiposIds = [... new Set(listaFiltradaTipos)];
-
-            const listaFiltradaAtaques 
-                = this.pokemonRequest.ataquesIds.filter(ataque => ataque != "");
-            this.pokemonRequest.ataquesIds = [... new Set(listaFiltradaAtaques)];
-
+            
+            this.pokemonRequest.ataquesIds = this.ataquesSelecionados.map(ataque => ataque.id);
+            
             PokemonDataService.criar(this.pokemonRequest)
-            .then(() => {
-                this.salvo = true;
-            })
-            .catch(erro => {
-                console.log(erro);
-                this.salvo = false;
-            })
+             .then(() => {
+                 this.salvo = true;
+             })
+             .catch(erro => {
+                 console.log(erro);
+                 this.salvo = false;
+             });
         },
         novo() {
             this.pokemonRequest = new PokemonRequest();
             this.salvo = false;
+        },
+        selecionarAtaque() {
+            if(this.ataquesSelecionados.length < 4) {
+                this.ataquesSelecionados.push(this.ataqueSelecionado);
+                this.ataquesSelecionados = [... new Set(this.ataquesSelecionados)];
+            }
+        },
+        removerAtaque(indice) {
+            this.ataquesSelecionados.splice(indice, 1);
         }
     },
     mounted() {
@@ -205,59 +210,47 @@ export default {
             <label for="ataque1" class="form-label">Ataque 1</label>
             <select id="ataque1" class="form-select form-select-lg mb-3" 
                 aria-label=".form-select-lg example"
-                v-model="pokemonRequest.ataquesIds[0]">
-                    <option value="" selected>Nenhum</option>
+                v-model="ataqueSelecionado"
+                @change="selecionarAtaque">
                     <option 
                         v-for="ataque in ataques" 
                         :key="ataque.id" 
-                        :value="ataque.id">
+                        :value="ataque">
                         {{ataque.nome}} | Forca: {{ataque.forca}} | {{ataque.categoria}} | {{ataque.tipo.nome}}
                     </option>
             </select>
         </div>
         <div class="row">
-            <label for="ataque2" class="form-label">Ataque 2</label>
-            <select id="ataque2" class="form-select form-select-lg mb-3" 
-                aria-label=".form-select-lg example"
-                v-model="pokemonRequest.ataquesIds[1]">
-                    <option value="" selected>Nenhum</option>
-                    <option 
-                        v-for="ataque in ataques" 
-                        :key="ataque.id" 
-                        :value="ataque.id">
-                        {{ataque.nome}} | Forca: {{ataque.forca}} | {{ataque.categoria}} | {{ataque.tipo.nome}}
-                    </option>
-            </select>
+            <div class="col-3" v-for="(ataque, indice) in ataquesSelecionados" :key="ataque.id">
+                <div class="card h-100" style="min-width: 10rem">
+                    <div class="card-header">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    {{ataque.nome}}
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn" @click.prevent="removerAtaque(indice)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Tipo: {{ataque.tipo.nome}}</p>
+                        <p class="card-text">Forca: {{ataque.forca}}</p>
+                        <p class="card-text">Acuracia: {{ataque.acuracia}}</p>
+                        <p class="card-text">PP: {{ataque.pontosDePoder}}</p>
+                        <p class="card-text">Categoria: {{ataque.categoria}}</p>
+                        <p class="card-text">Descricao: {{ataque.descricao}}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <label for="ataque3" class="form-label">Ataque 3</label>
-            <select id="ataque3" class="form-select form-select-lg mb-3" 
-                aria-label=".form-select-lg example"
-                v-model="pokemonRequest.ataquesIds[2]">
-                    <option value="" selected>Nenhum</option>
-                    <option 
-                        v-for="ataque in ataques" 
-                        :key="ataque.id" 
-                        :value="ataque.id">
-                        {{ataque.nome}} | Forca: {{ataque.forca}} | {{ataque.categoria}} | {{ataque.tipo.nome}}
-                    </option>
-            </select>
-        </div>
-        <div class="row">
-            <label for="ataque4" class="form-label">Ataque 4</label>
-            <select id="ataque4" class="form-select form-select-lg mb-3" 
-                aria-label=".form-select-lg example"
-                v-model="pokemonRequest.ataquesIds[3]">
-                    <option value="" selected>Nenhum</option>
-                    <option 
-                        v-for="ataque in ataques" 
-                        :key="ataque.id" 
-                        :value="ataque.id">
-                        {{ataque.nome}} | Forca: {{ataque.forca}} | {{ataque.categoria}} | {{ataque.tipo.nome}}
-                    </option>
-            </select>
-        </div>
-        <button @click.prevent="salvar" class="btn btn-success">Salvar</button>
+        <button @click.prevent="salvar" class="btn btn-success mt-2">Salvar</button>
     </form>
 </div>
 <div v-else>
