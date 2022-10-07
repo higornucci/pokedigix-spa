@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       treinadorRequest: new TreinadorRequest(),
+      treinadorResponse: {},
       endereco: new Endereco(),
       salvo: false,
       pokemons: [],
@@ -47,7 +48,17 @@ export default {
     cancelar() {
         this.endereco = new Endereco();
     },
-    salvar() {},
+    salvar() {
+      TreinadorDataService.criar(this.treinadorRequest)
+      .then(resposta => {
+        this.treinadorResponse = resposta;
+        this.salvo = true;
+      })
+      .catch(erro => {
+        this.salvo = false;
+        console.log(erro);
+      }) 
+    },
     novo() {},
     voltar() {},
   },
@@ -87,15 +98,20 @@ export default {
         </option>
       </select>
       <div class="row">
-        <div class="col-4" v-for="endereco in enderecos" :key="endereco.id">
+        <div class="col-4 mb-2" v-for="endereco in enderecos" :key="endereco.id">
             <div class="card">
                 <div class="card-body">
                     <p class="card-text">Cidade: {{endereco.cidade}}</p>
                     <p class="card-text">Regiao: {{endereco.regiao}}</p>
                 </div>
+                <div class="card-footer text-center">
+                  <input type="radio" :value="endereco.id" 
+                    class="form-check-input" name="radioEndereco"
+                    v-model="treinadorRequest.idEndereco"/>
+                </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-4 mb-2">
             <div class="card h-100 text-center">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#enderecoModal" 
                     class="btn btn-outline-primary h-100 w-100">
@@ -106,7 +122,7 @@ export default {
             </div>
         </div>
       </div>
-      <button @click.prevent="salvar" class="btn btn-success mt-2">Salvar</button>
+      <button @click.prevent="salvar" class="btn btn-success">Salvar</button>
     </form>
     <div class="modal fade" id="enderecoModal" tabindex="-1" aria-labelledby="enderecoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -146,7 +162,7 @@ export default {
   <div v-else>
     <div class="row">
       <div class="alert alert-success mt-3" role="alert">
-        O pokemon {{ treinadorRequest.nome }} foi salvo com sucesso!
+        O treinador {{ treinadorRequest.nome }} foi salvo com sucesso!
       </div>
     </div>
     <div class="row">
