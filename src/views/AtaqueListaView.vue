@@ -67,7 +67,7 @@ export default {
       <loading
         v-model:active="isLoading"
         :is-full-page="fullPage"
-        :loader="'spinner'"
+        loader="spinner"
       />
       <table class="table table-striped">
         <thead>

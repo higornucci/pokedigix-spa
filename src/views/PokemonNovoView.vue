@@ -3,6 +3,7 @@ import PokemonDataService from '../services/PokemonDataService';
 import TipoDataService from '../services/TipoDataService';
 import PokemonRequest from '../models/PokemonRequest';
 import AtaqueDataService from '../services/AtaqueDataService';
+import MensagemSucesso from '../components/MensagemSucesso.vue';
 export default {
     name: 'pokemons-novo',
     data() {
@@ -15,6 +16,9 @@ export default {
             ataqueSelecionado: {},
         }
     },
+    components: {
+        MensagemSucesso
+    },  
     methods: {
         carregarTipos() {
             TipoDataService.buscarTodos()
@@ -254,9 +258,8 @@ export default {
     </form>
 </div>
 <div v-else>
-    <div class="alert alert-success mt-3" role="alert">
+    <MensagemSucesso urlListagem="pokemons-lista" @cadastro="novo">
         O pokemon {{pokemonRequest.nome}} foi salvo com sucesso!
-    </div>
-    <button @click="novo" class="btn btn-primary">Novo</button>
+    </MensagemSucesso>
 </div>
 </template>

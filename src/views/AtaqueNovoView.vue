@@ -3,8 +3,9 @@ import AtaqueDataService from '../services/AtaqueDataService';
 import AtaqueRequest from '../models/AtaqueRequest';
 import AtaqueResponse from '../models/AtaqueResponse';
 import TipoDataService from '../services/TipoDataService';
+import MensagemSucesso from '../components/MensagemSucesso.vue';
 export default {
-    name: 'ataques-novo',
+    name: "ataques-novo",
     data() {
         return {
             ataqueRequest: new AtaqueRequest(),
@@ -29,16 +30,16 @@ export default {
             ],
             tipos: [],
             desabilitarForca: false
-        }
+        };
     },
     methods: {
         salvar() {
             AtaqueDataService.criar(this.ataqueRequest)
-            .then(resposta => {
+                .then(resposta => {
                 this.ataqueResponse = resposta;
                 this.salvo = true;
             })
-            .catch(erro => {
+                .catch(erro => {
                 console.log(erro);
                 this.salvo = false;
             });
@@ -52,18 +53,19 @@ export default {
         },
         carregarTipos() {
             TipoDataService.buscarTodos()
-            .then(resposta => {
+                .then(resposta => {
                 this.tipos = resposta;
-                this.ataqueRequest.tipoId = this.tipos[0].id
+                this.ataqueRequest.tipoId = this.tipos[0].id;
             })
-            .catch(erro => {
+                .catch(erro => {
                 console.log(erro);
             });
         },
         escolherCategoria() {
-            if(this.ataqueRequest.categoria == "EFEITO") {
+            if (this.ataqueRequest.categoria == "EFEITO") {
                 this.desabilitarForca = true;
-            } else {
+            }
+            else {
                 this.desabilitarForca = false;
             }
         }
@@ -72,6 +74,7 @@ export default {
         this.carregarTipos();
         this.novo();
     },
+    components: { MensagemSucesso }
 }
 </script>
 
@@ -163,12 +166,8 @@ export default {
         </form>
     </div>
     <div v-else>
-        <div class="row">
-            <h4>Salvo com sucesso!</h4>
-            <span>Ataque id: {{ataqueResponse.id}}</span>
-        </div>
-        <div class="row-sm">
-            <button @click="novo" class="btn btn-primary">Novo</button>
-        </div>
+        <MensagemSucesso urlListagem="ataques-lista" @cadastro="novo">
+            <span>O ataque {{ataqueResponse.nome}} foi cadastrado com sucesso!</span>
+        </MensagemSucesso>
     </div>
 </template>
