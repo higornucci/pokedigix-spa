@@ -4,6 +4,7 @@ import PokemonDataService from "../services/PokemonDataService";
 import TreinadorDataService from "../services/TreinadorDataService";
 import EnderecoDataService from "../services/EnderecoDataService";
 import Endereco from '../models/Endereco';
+import MensagemSucessoVue from "../components/MensagemSucesso.vue";
 export default {
   name: "treinadores-novo",
   data() {
@@ -15,6 +16,9 @@ export default {
       pokemons: [],
       enderecos: [],
     };
+  },
+  components: {
+    MensagemSucessoVue
   },
   methods: {
     carregarPokemons() {
@@ -37,8 +41,8 @@ export default {
     },
     salvarEndereco() {
         EnderecoDataService.criar(this.endereco)
-        .then(() => {
-            this.enderecos.push(this.endereco);
+        .then(resposta => {
+            this.enderecos.push(resposta);
             this.endereco = new Endereco();
         })
         .catch(erro => {
@@ -59,8 +63,10 @@ export default {
         console.log(erro);
       }) 
     },
-    novo() {},
-    voltar() {},
+    novo() {
+      this.salvo = false;
+      this.treinadorRequest = new TreinadorRequest();
+    },
   },
   mounted() {
     this.carregarPokemons();
@@ -160,18 +166,8 @@ export default {
     </div>
   </div>
   <div v-else>
-    <div class="row">
-      <div class="alert alert-success mt-3" role="alert">
-        O treinador {{ treinadorRequest.nome }} foi salvo com sucesso!
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-1">
-        <button @click="novo" class="btn btn-primary">Novo</button>
-      </div>
-      <div class="col-1">
-        <button @click="voltar" class="btn btn-secondary">Voltar</button>
-      </div>
-    </div>
+    <MensagemSucessoVue urlListagem="treinadores-lista" @cadastro="novo">
+      <span>O treinador {{ treinadorRequest.nome }} foi salvo com sucesso!</span>
+    </MensagemSucessoVue>
   </div>
 </template>
