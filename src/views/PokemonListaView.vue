@@ -1,23 +1,63 @@
 <script>
 import PokemonDataService from "../services/PokemonDataService";
+import Ordenacao from '../components/Ordenacao.vue';
 export default {
   name: "lista-pokemons",
   data() {
-    return { pokemons: [] };
+    return { 
+      pokemons: [],
+      pagina: 0,
+      tamanho: 4,
+      ordenacao: {
+        titulo: "",
+        direcao: "",
+        campo: ""
+      },
+      opcoes: [{
+                titulo: "Nome: Crescente",
+                direcao: "ASC",
+                campo: "nome"
+            },
+            {
+                titulo: "Nome: Decrescente",
+                direcao: "DESC",
+                campo: "nome"
+            },
+          {
+            titulo: "Numero: Crescente",
+            direcao: "ASC",
+            campo: "numeroPokedex"
+          },
+          {
+            titulo: "Nivel: Decrescente",
+            direcao: "DESC",
+            campo: "nivel"
+          }],
+      termo: "" 
+    };
+  },
+  components: {
+    Ordenacao
   },
   methods: {
+    filtarPeloDigitada() {
+      if(this.termo.length > 3) {
+        this.buscarPokemons();
+      }
+    },
     buscarPokemons() {
-      PokemonDataService.buscarTodos()
+      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
         .then((resposta) => {
           this.pokemons = resposta;
         })
         .catch((erro) => {
           console.log(erro);
         });
+      },
     },
-  },
-  mounted() {
-    this.buscarPokemons();
+    mounted() {
+      this.buscarPokemons();
+      this.ordenacao = this.opcoes[0];
   },
 };
 </script>
@@ -26,7 +66,19 @@ export default {
   <main>
     <div>
       <h2>Lista de Pokemon</h2>
-      <div class="row">
+      <div class="row justify-content-end">
+        <div class="col-2">
+          <Ordenacao v-model="ordenacao" @ordenar="buscarPokemons" 
+            :ordenacao="ordenacao" :opcoes="opcoes" />
+        </div>
+        <div class="col-4">
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" v-model="termo" type="search" placeholder="Procurar" aria-label="Search">
+            <button class="btn btn-outline-success" type="button" @click.prevent="buscarPokemons">Filtrar</button>
+          </form>
+        </div>
+      </div>
+      <div class="row mt-2">
         <div class="col-6" v-for="pokemon in pokemons" :key="pokemon.id">
           <div class="card mb-3">
             <div class="card-header">
