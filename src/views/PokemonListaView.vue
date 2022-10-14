@@ -1,18 +1,23 @@
 <script>
 import PokemonDataService from "../services/PokemonDataService";
 import Ordenacao from '../components/Ordenacao.vue';
+import Paginacao from '../components/Paginacao.vue';
 export default {
   name: "lista-pokemons",
   data() {
     return { 
       pokemons: [],
-      pagina: 0,
+      pagina: 1,
       tamanho: 4,
       ordenacao: {
         titulo: "",
         direcao: "",
         campo: ""
       },
+      url: '#',
+      pageParam:'page',
+      total: 10,
+      quantidade: 3,
       opcoes: [{
                 titulo: "Nome: Crescente",
                 direcao: "ASC",
@@ -37,16 +42,21 @@ export default {
     };
   },
   components: {
-    Ordenacao
-  },
+    Ordenacao,
+    Paginacao
+},
   methods: {
     filtarPeloDigitada() {
       if(this.termo.length > 3) {
         this.buscarPokemons();
       }
     },
+    trocarPagina(p){
+      this.pagina = p;
+      this.buscarPokemons()
+    },
     buscarPokemons() {
-      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
+      PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina - 1, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
         .then((resposta) => {
           this.pokemons = resposta;
         })
@@ -163,6 +173,7 @@ export default {
             </div>
           </div>
         </div>
+        <Paginacao :total="total" :quantidade="quantidade" v-model="pagina" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
       </div>
       <div class="row">
         <div class="col-1">
