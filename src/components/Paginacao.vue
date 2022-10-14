@@ -66,7 +66,7 @@ export default {
       <li v-if="inicio > quantidade" class="page-item">
         <a href="#" @click="trocarPagina(atual-1)" aria-label="Anterior" class="page-link"><span aria-hidden="true">&laquo;</span></a>
       </li>
-      <li v-if="contadorDePaginas.length" v-for="p in contadorDePaginas" :class="p == atual ? 'active' : ''" class="page-item">
+      <li :key="p" v-for="p in contadorDePaginas" :class="p == atual ? 'active' : ''" class="page-item">
         <a href="#" @click="p == atual ? null : trocarPagina(p)" v-text="p" class="page-link"></a>
       </li>
       <li v-if="fim != total" class="page-item">

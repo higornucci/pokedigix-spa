@@ -2,6 +2,7 @@
 import PokemonDataService from "../services/PokemonDataService";
 import Ordenacao from '../components/Ordenacao.vue';
 import Paginacao from '../components/Paginacao.vue';
+import Pesquisa from '../components/Pesquisa.vue';
 export default {
   name: "lista-pokemons",
   data() {
@@ -14,9 +15,7 @@ export default {
         direcao: "",
         campo: ""
       },
-      url: '#',
-      pageParam:'page',
-      total: 10,
+      total: 4,
       quantidade: 3,
       opcoes: [{
                 titulo: "Nome: Crescente",
@@ -43,7 +42,8 @@ export default {
   },
   components: {
     Ordenacao,
-    Paginacao
+    Paginacao,
+    Pesquisa
 },
   methods: {
     filtarPeloDigitada() {
@@ -53,7 +53,11 @@ export default {
     },
     trocarPagina(p){
       this.pagina = p;
-      this.buscarPokemons()
+      this.buscarPokemons();
+    },
+    pesquisar(texto) {
+      this.termo = texto;
+      this.buscarPokemons();
     },
     buscarPokemons() {
       PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina - 1, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
@@ -66,8 +70,8 @@ export default {
       },
     },
     mounted() {
-      this.buscarPokemons();
       this.ordenacao = this.opcoes[0];
+      this.buscarPokemons();
   },
 };
 </script>
@@ -82,10 +86,7 @@ export default {
             :ordenacao="ordenacao" :opcoes="opcoes" />
         </div>
         <div class="col-4">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" v-model="termo" type="search" placeholder="Procurar" aria-label="Search">
-            <button class="btn btn-outline-success" type="button" @click.prevent="buscarPokemons">Filtrar</button>
-          </form>
+          <Pesquisa :texto="termo" :pesquisar="pesquisar" />
         </div>
       </div>
       <div class="row mt-2">
@@ -172,7 +173,7 @@ export default {
             </div>
           </div>
         </div>
-        <Paginacao :total="total" :quantidade="quantidade" v-model="pagina" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
+        <Paginacao :total="total" :quantidade="quantidade" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
       </div>
       <div class="row">
         <div class="col-1">
