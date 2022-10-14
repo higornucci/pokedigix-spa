@@ -3,7 +3,7 @@
  * quantidade: quantidade de páginas que podem aparecer no layout
  * total: total de páginas
  * atual: página atual
- * fn: função que gerencia o clique na página
+ * trocarPagina: função que gerencia o clique na página
 **/
 export default {
     name: 'paginacao',
