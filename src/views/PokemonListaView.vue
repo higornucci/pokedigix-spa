@@ -141,14 +141,13 @@ export default {
                     </svg>
                   </p>
                   <div class="collapse" :id="'collapseExample' + pokemon.id">
-  <div class="card card-body">
-    <p class="card-text">Pokedex: {{ pokemon.numeroPokedex }}</p>
-                  <p class="card-text">Pokedex: {{ pokemon.peso }}</p>
-                  <p class="card-text">Pokedex: {{ pokemon.altura }}</p>
-                  <p class="card-text">Pokedex: {{ pokemon.felicidade }}</p>
-  </div>
-</div>
-                  
+                    <div class="card card-body">
+                      <p class="card-text">Pokedex: {{ pokemon.numeroPokedex }}</p>
+                          <p class="card-text">Peso: {{ pokemon.peso }}</p>
+                          <p class="card-text">Altura: {{ pokemon.altura }}</p>
+                          <p class="card-text">Felicidade: {{ pokemon.felicidade }}</p>
+                    </div>
+                  </div>
                   <div class="text-center">
                     <button type="button" data-bs-toggle="collapse" class="btn btn-outline-primary pt-1 m-1" :href="'#collapseExample' + pokemon.id">
                       Mais
