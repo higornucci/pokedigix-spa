@@ -3,19 +3,20 @@ import PokemonDataService from "../services/PokemonDataService";
 import Ordenacao from '../components/Ordenacao.vue';
 import Paginacao from '../components/Paginacao.vue';
 import Pesquisa from '../components/Pesquisa.vue';
+import { Popover } from "bootstrap/dist/js/bootstrap.esm.min.js";
 export default {
   name: "lista-pokemons",
   data() {
     return { 
       pokemons: [],
       pagina: 1,
-      tamanho: 4,
+      tamanho: 6,
       ordenacao: {
         titulo: "",
         direcao: "",
         campo: ""
       },
-      total: 4,
+      totalPaginas: 4,
       quantidade: 3,
       opcoes: [{
                 titulo: "Nome: Crescente",
@@ -62,16 +63,22 @@ export default {
     buscarPokemons() {
       PokemonDataService.buscarTodosPaginadoOrdenado(this.pagina - 1, this.tamanho, this.ordenacao.campo, this.ordenacao.direcao, this.termo)
         .then((resposta) => {
-          this.pokemons = resposta;
+          this.pokemons = resposta.pokemons;
+          this.totalPaginas = resposta.totalPaginas;
         })
         .catch((erro) => {
           console.log(erro);
         });
       },
+      novo() {
+        this.$router.push({name: 'pokemons-novo'});
+      }
     },
     mounted() {
       this.ordenacao = this.opcoes[0];
       this.buscarPokemons();
+      Array.from(document.querySelectorAll('button[data-bs-toggle="popover"]'))
+    .forEach(popoverNode => new Popover(popoverNode))
   },
 };
 </script>
@@ -80,6 +87,8 @@ export default {
   <main>
     <div>
       <h2>Lista de Pokemon</h2>
+      <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+
       <div class="row justify-content-end">
         <div class="col-2">
           <Ordenacao v-model="ordenacao" @ordenar="buscarPokemons" 
@@ -173,7 +182,7 @@ export default {
             </div>
           </div>
         </div>
-        <Paginacao :total="total" :quantidade="quantidade" :atual="pagina" :trocarPagina="trocarPagina"></Paginacao>
+        <Paginacao :totalPaginas="totalPaginas" :quantidadeItens="quantidade" :atual="pagina" :trocarPagina="trocarPagina" />
       </div>
       <div class="row">
         <div class="col-1">
