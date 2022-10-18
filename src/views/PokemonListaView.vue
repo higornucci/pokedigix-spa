@@ -3,14 +3,13 @@ import PokemonDataService from "../services/PokemonDataService";
 import Ordenacao from '../components/Ordenacao.vue';
 import Paginacao from '../components/Paginacao.vue';
 import Pesquisa from '../components/Pesquisa.vue';
-import { Popover } from "bootstrap/dist/js/bootstrap.esm.min.js";
 export default {
   name: "lista-pokemons",
   data() {
     return { 
       pokemons: [],
       pagina: 1,
-      tamanho: 6,
+      tamanho: 4,
       ordenacao: {
         titulo: "",
         direcao: "",
@@ -47,17 +46,15 @@ export default {
     Pesquisa
 },
   methods: {
-    filtarPeloDigitada() {
-      if(this.termo.length > 3) {
+    filtrarAoDigitar(texto) {
+      this.termo = texto.trim();
+      if(this.termo.length > 3 || this.termo == "") {
+        this.pagina = 1;
         this.buscarPokemons();
       }
     },
     trocarPagina(p){
       this.pagina = p;
-      this.buscarPokemons();
-    },
-    pesquisar(texto) {
-      this.termo = texto;
       this.buscarPokemons();
     },
     buscarPokemons() {
@@ -87,15 +84,13 @@ export default {
   <main>
     <div>
       <h2>Lista de Pokemon</h2>
-      <button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
-
       <div class="row justify-content-end">
         <div class="col-2">
           <Ordenacao v-model="ordenacao" @ordenar="buscarPokemons" 
             :ordenacao="ordenacao" :opcoes="opcoes" />
         </div>
         <div class="col-4">
-          <Pesquisa :texto="termo" :pesquisar="pesquisar" />
+          <Pesquisa :texto="termo" :pesquisar="filtrarAoDigitar" />
         </div>
       </div>
       <div class="row mt-2">
