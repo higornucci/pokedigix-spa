@@ -7,8 +7,9 @@ import AtaqueEditView from '../views/AtaqueEditView.vue';
 import TipoListaView from '../views/TipoListaView.vue';
 import TipoEditView from '../views/TipoEditView.vue';
 import PokemonNovoView from '../views/PokemonNovoView.vue';
-import TreinadorListaView from '../views/TreinadorListaView.vue';
-import TreinadorNovoView from '../views/TreinadorNovoView.vue';
+const PageNotFound = () => import('@/views/PageNotFound.vue');
+const TreinadorNovoView = () => import('@/views/TreinadorNovoView.vue');
+const TreinadorListaView = () => import('@/views/TreinadorListaView.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: PokemonListaView
+    },
+    {
+      path: '/:catchAll(.*)*',
+      name: "not-found",
+      component: PageNotFound,
     },
     {
       path: '/tipos/novo',
