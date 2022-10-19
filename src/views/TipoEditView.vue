@@ -1,6 +1,7 @@
 <script>
 import TipoDataService from '../services/TipoDataService';
 import Tipo from '../models/Tipo';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import Loading from "vue-loading-overlay";
 export default {
     name: 'tipos-edit',

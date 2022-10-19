@@ -1,5 +1,6 @@
 <script>
     import TipoDataService from '../services/TipoDataService';
+    import 'vue-loading-overlay/dist/vue-loading.css';
     import Loading from "vue-loading-overlay";
 export default {
   name: "tipos-lista",

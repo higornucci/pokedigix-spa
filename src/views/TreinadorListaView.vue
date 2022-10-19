@@ -1,5 +1,6 @@
 <script>
 import TreinadorDataService from '../services/TreinadorDataService';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import Loading from "vue-loading-overlay";
 
 export default {
