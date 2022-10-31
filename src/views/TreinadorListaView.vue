@@ -2,6 +2,9 @@
 import TreinadorDataService from '../services/TreinadorDataService';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import Loading from "vue-loading-overlay";
+import { useCookies } from "vue3-cookies";
+
+const { cookies } = useCookies();
 
 export default {
     name: "treinadores-lista",
@@ -29,6 +32,10 @@ export default {
         novo() {
             this.$router.push({ name: "treinadores-novo"});
         },
+        trocar(treinador) {
+            cookies.set('treinador_id', treinador.id, '5m');
+            cookies.set('treinador_nome', treinador.nome, '5m');
+        }
     },
 
     mounted() {
@@ -47,6 +54,11 @@ export default {
                 <div class="card mb-4" style="max-width: 230px;">
                     <h5 class="card-header">
                         {{treinador.nome}}
+                        <button class="btn btn-outline-primary" @click="trocar(treinador)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                            </svg>
+                        </button>
                     </h5>
                     <div class="card-body">
                         <h5 class="card-title"> {{treinador.endereco.regiao}} - {{treinador.endereco.cidade}} </h5>

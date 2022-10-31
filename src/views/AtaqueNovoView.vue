@@ -4,6 +4,8 @@ import AtaqueRequest from '../models/AtaqueRequest';
 import AtaqueResponse from '../models/AtaqueResponse';
 import TipoDataService from '../services/TipoDataService';
 import MensagemSucesso from '../components/MensagemSucesso.vue';
+import MensagemErro from '../components/MensagemErro.vue';
+import { Toast } from "bootstrap";
 export default {
     name: "ataques-novo",
     data() {
@@ -29,18 +31,25 @@ export default {
                 }
             ],
             tipos: [],
-            desabilitarForca: false
+            desabilitarForca: false,
+            mensagemDeErro: "",
+            tipo: "",
         };
     },
     methods: {
         salvar() {
             AtaqueDataService.criar(this.ataqueRequest)
-                .then(resposta => {
+            .then(resposta => {
                 this.ataqueResponse = resposta;
                 this.salvo = true;
             })
-                .catch(erro => {
+            .catch(erro => {
                 console.log(erro);
+                this.mensagemDeErro = erro.response.data.errors[0];
+                this.tipo = erro.response.data.type;
+                const toastLiveExample = document.getElementById("liveToast");
+                const toast = new Toast(toastLiveExample);
+                toast.show();
                 this.salvo = false;
             });
         },
@@ -74,13 +83,13 @@ export default {
         this.carregarTipos();
         this.novo();
     },
-    components: { MensagemSucesso }
+    components: { MensagemSucesso, MensagemErro }
 }
 </script>
 
 <template>
     <div v-if="!salvo">
-        <form class="row g-3">
+        <form class="row g-3" @submit.prevent="salvar">
             <div class="col-12">
                 <label 
                     for="nome" 
@@ -162,8 +171,9 @@ export default {
                     placeholder="ex: Esse ataque machuca"
                     v-model="ataqueRequest.descricao"></textarea>
             </div>
-            <button @click.prevent="salvar" class="btn btn-success">Salvar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
         </form>
+        <MensagemErro :mensagemDeErro="mensagemDeErro"></MensagemErro>
     </div>
     <div v-else>
         <MensagemSucesso urlListagem="ataques-lista" @cadastro="novo">
