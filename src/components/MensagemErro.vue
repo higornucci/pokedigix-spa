@@ -1,8 +1,9 @@
 <script>
+import MensagemErroDTO from '../models/MensagemErroDTO';
 export default {
   name: "mensagem-erro",
   props: {
-    mensagemDeErro: String,
+    mensagemErroDTO: MensagemErroDTO,
   },
 };
 </script>
@@ -17,7 +18,7 @@ export default {
       aria-atomic="true"
     >
       <div class="toast-body">
-        {{ mensagemDeErro }}
+        {{ mensagemErroDTO.mensagemDeErro }}
       </div>
     </div>
   </div>

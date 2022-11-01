@@ -5,6 +5,7 @@ import AtaqueResponse from '../models/AtaqueResponse';
 import TipoDataService from '../services/TipoDataService';
 import MensagemSucesso from '../components/MensagemSucesso.vue';
 import MensagemErro from '../components/MensagemErro.vue';
+import MensagemErroDTO from '../models/MensagemErroDTO';
 import { Toast } from "bootstrap";
 export default {
     name: "ataques-novo",
@@ -32,8 +33,7 @@ export default {
             ],
             tipos: [],
             desabilitarForca: false,
-            mensagemDeErro: "",
-            tipo: "",
+            mensagemErroDTO: new MensagemErroDTO()
         };
     },
     methods: {
@@ -44,9 +44,21 @@ export default {
                 this.salvo = true;
             })
             .catch(erro => {
-                console.log(erro);
-                this.mensagemDeErro = erro.response.data.errors[0];
-                this.tipo = erro.response.data.type;
+                this.mensagemErroDTO.tipo = erro.response.data.type;
+                this.mensagemErroDTO.status = erro.response.data.status;
+                const campoAcuracia = document.getElementById("acuracia");
+                const campoForca = document.getElementById("forca");
+                campoAcuracia.setCustomValidity("");
+                campoForca.setCustomValidity("");
+                if(this.mensagemErroDTO.tipo == "DataIntegrityViolationException") {
+                    this.mensagemErroDTO.mensagemDeErro = "Preencha todos os campos obrigatorios."
+                } else if (this.mensagemErroDTO.tipo == "AcuraciaInvalidaException") {
+                    this.mensagemErroDTO.mensagemDeErro = erro.response.data.errors[0];
+                    campoAcuracia.setCustomValidity(this.mensagemErroDTO.mensagemDeErro)
+                } else if (this.mensagemErroDTO.tipo == "ForcaInvalidaParaCategoriaException") {
+                    this.mensagemErroDTO.mensagemDeErro = erro.response.data.errors[0];
+                    campoForca.setCustomValidity(this.mensagemErroDTO.mensagemDeErro)
+                }
                 const toastLiveExample = document.getElementById("liveToast");
                 const toast = new Toast(toastLiveExample);
                 toast.show();
@@ -82,6 +94,20 @@ export default {
     mounted() {
         this.carregarTipos();
         this.novo();
+        'use strict'
+
+        const forms = document.querySelectorAll('.needs-validation')
+
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
     },
     components: { MensagemSucesso, MensagemErro }
 }
@@ -89,7 +115,7 @@ export default {
 
 <template>
     <div v-if="!salvo">
-        <form class="row g-3" @submit.prevent="salvar">
+        <form class="row g-3 needs-validation" @submit.prevent="salvar" novalidate >
             <div class="col-12">
                 <label 
                     for="nome" 
@@ -106,23 +132,32 @@ export default {
                 <label 
                     for="forca" 
                     class="form-label">Forca</label>
-                <input 
-                    type="text"
-                    required :disabled="desabilitarForca"
-                    class="form-control"
-                    v-model="ataqueRequest.forca"
-                    id="forca" >
+                <div class="has-validation">
+                    <input 
+                        type="text"
+                        required :disabled="desabilitarForca"
+                        class="form-control"
+                        v-model="ataqueRequest.forca"
+                        id="forca" >
+                    <div v-if="this.mensagemErroDTO.tipo == 'ForcaInvalidaParaCategoriaException'" class="invalid-feedback">
+                        {{mensagemErroDTO.mensagemDeErro}}
+                    </div>
+                </div>
             </div>
             <div class="col-6">
                 <label 
                     for="acuracia" 
                     class="form-label">Acuracia</label>
-                <input 
-                    type="text"
-                    required 
-                    class="form-control" 
-                    v-model="ataqueRequest.acuracia"
-                    id="acuracia" >
+                    <div class="has-validation"></div>
+                        <input 
+                            type="text"
+                            required 
+                            class="form-control" 
+                            v-model="ataqueRequest.acuracia"
+                            id="acuracia" >
+                    <div v-if="this.mensagemErroDTO.tipo == 'AcuraciaInvalidaException'" class="invalid-feedback">
+                        {{mensagemErroDTO.mensagemDeErro}}
+                    </div>
             </div>
             <div class="col-3">
                 <label 
@@ -173,7 +208,7 @@ export default {
             </div>
             <button type="submit" class="btn btn-success">Salvar</button>
         </form>
-        <MensagemErro :mensagemDeErro="mensagemDeErro"></MensagemErro>
+        <MensagemErro v-if="mensagemErroDTO.tipo == 'DataIntegrityViolationException'" :mensagemErroDTO="mensagemErroDTO"></MensagemErro>
     </div>
     <div v-else>
         <MensagemSucesso urlListagem="ataques-lista" @cadastro="novo">
