@@ -94,20 +94,15 @@ export default {
     mounted() {
         this.carregarTipos();
         this.novo();
-        'use strict'
+        const form = document.querySelector('.needs-validation')
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
 
-        const forms = document.querySelectorAll('.needs-validation')
-
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-
-                form.classList.add('was-validated')
-            }, false)
-        })
+            form.classList.add('was-validated')
+        }, false)
     },
     components: { MensagemSucesso, MensagemErro }
 }
@@ -148,15 +143,16 @@ export default {
                 <label 
                     for="acuracia" 
                     class="form-label">Acuracia</label>
-                    <div class="has-validation"></div>
+                    <div class="has-validation">
                         <input 
-                            type="text"
-                            required 
-                            class="form-control" 
-                            v-model="ataqueRequest.acuracia"
-                            id="acuracia" >
-                    <div v-if="this.mensagemErroDTO.tipo == 'AcuraciaInvalidaException'" class="invalid-feedback">
-                        {{mensagemErroDTO.mensagemDeErro}}
+                        type="text"
+                        required 
+                        class="form-control" 
+                        v-model="ataqueRequest.acuracia"
+                        id="acuracia" >
+                        <div v-if="this.mensagemErroDTO.tipo == 'AcuraciaInvalidaException'" class="invalid-feedback">
+                            {{mensagemErroDTO.mensagemDeErro}}
+                        </div>
                     </div>
             </div>
             <div class="col-3">
