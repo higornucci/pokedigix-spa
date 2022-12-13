@@ -19,11 +19,13 @@ export default {
             AuthDataService.entrar(this.login)
                 .then(resposta => {
                     this.loginResponse = resposta;
+                    console.log(this.loginResponse);
                     cookies.set('usuarioLogado', 
-                        this.loginResponse, tempoDeExpiracao());
+                        this.loginResponse, this.tempoDeExpiracao());
                     this.$router.push({ name: "tipos-lista" });
                 })
-                .catch(() => {
+                .catch(erro => {
+                    console.log(erro);
                 })
         },
         tempoDeExpiracao() {
@@ -40,7 +42,7 @@ export default {
                     <h3 class="text-center">Entrar</h3>
                 </div>
                 <div class="card-body">
-                    <form @submit="entrar">
+                    <form @submit.prevent="entrar">
                         <div class="input-group form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text p-2 rounded-3"><svg xmlns="http://www.w3.org/2000/svg"
