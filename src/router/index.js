@@ -10,6 +10,8 @@ const PokemonNovoView = () => import('@/views/PokemonNovoView.vue');
 const PageNotFound = () => import('@/views/PageNotFound.vue');
 const TreinadorNovoView = () => import('@/views/TreinadorNovoView.vue');
 const TreinadorListaView = () => import('@/views/TreinadorListaView.vue');
+const SignInView = () => import('@/views/SignInView.vue');
+const SignUpView = () => import('@/views/SignUpView.vue');
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +75,16 @@ const router = createRouter({
       path: '/treinadores/novo',
       name: 'treinadores-novo',
       component: TreinadorNovoView
+    },
+    {
+      path: '/usuarios/novo',
+      name: 'usuarios-novo',
+      component: SignUpView
+    },
+    {
+      path: '/logins/novo',
+      name: 'logins-novo',
+      component: SignInView
     }
   ]
 })
